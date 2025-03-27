@@ -1,93 +1,69 @@
 {
-  "_from": "wrap-ansi@^6.2.0",
-  "_id": "wrap-ansi@6.2.0",
+  "_from": "fs-minipass@^2.0.0",
+  "_id": "fs-minipass@2.1.0",
   "_inBundle": false,
-  "_integrity": "sha512-r6lPcBGxZXlIcymEu7InxDMhdW0KDxpLgoFLcguasxCaJ/SOIZwINatK9KY/tf+ZrlywOKU0UDj3ATXUBfxJXA==",
-  "_location": "/wrap-ansi",
+  "_integrity": "sha512-V/JgOLFCS+R6Vcq0slCuaeWEdNC3ouDlJMNIsacH2VtALiu9mV4LPrHc5cDl8k5aw6J8jwgWWpiTo5RYhmIzvg==",
+  "_location": "/fs-minipass",
   "_phantomChildren": {},
   "_requested": {
     "type": "range",
     "registry": true,
-    "raw": "wrap-ansi@^6.2.0",
-    "name": "wrap-ansi",
-    "escapedName": "wrap-ansi",
-    "rawSpec": "^6.2.0",
+    "raw": "fs-minipass@^2.0.0",
+    "name": "fs-minipass",
+    "escapedName": "fs-minipass",
+    "rawSpec": "^2.0.0",
     "saveSpec": null,
-    "fetchSpec": "^6.2.0"
+    "fetchSpec": "^2.0.0"
   },
   "_requiredBy": [
-    "/cliui"
+    "/cacache",
+    "/tar"
   ],
-  "_resolved": "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-6.2.0.tgz",
-  "_shasum": "e9393ba07102e6c91a3b221478f0257cd2856e53",
-  "_spec": "wrap-ansi@^6.2.0",
-  "_where": "/Users/rissriva/Desktop/ExpenseManagementSystem/expense-management-system/node_modules/cliui",
+  "_resolved": "https://registry.npmjs.org/fs-minipass/-/fs-minipass-2.1.0.tgz",
+  "_shasum": "7f5036fdbf12c63c169190cbe4199c852271f9fb",
+  "_spec": "fs-minipass@^2.0.0",
+  "_where": "/Users/rissriva/Desktop/ExpenseManagementSystem/expense-management-system/node_modules/cacache",
   "author": {
-    "name": "Sindre Sorhus",
-    "email": "sindresorhus@gmail.com",
-    "url": "sindresorhus.com"
+    "name": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/"
   },
   "bugs": {
-    "url": "https://github.com/chalk/wrap-ansi/issues"
+    "url": "https://github.com/npm/fs-minipass/issues"
   },
   "bundleDependencies": false,
   "dependencies": {
-    "ansi-styles": "^4.0.0",
-    "string-width": "^4.1.0",
-    "strip-ansi": "^6.0.0"
+    "minipass": "^3.0.0"
   },
   "deprecated": false,
-  "description": "Wordwrap a string with ANSI escape codes",
+  "description": "fs read and write streams based on minipass",
   "devDependencies": {
-    "ava": "^2.1.0",
-    "chalk": "^2.4.2",
-    "coveralls": "^3.0.3",
-    "has-ansi": "^3.0.0",
-    "nyc": "^14.1.1",
-    "xo": "^0.24.0"
+    "mutate-fs": "^2.0.1",
+    "tap": "^14.6.4"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">= 8"
   },
   "files": [
     "index.js"
   ],
-  "homepage": "https://github.com/chalk/wrap-ansi#readme",
-  "keywords": [
-    "wrap",
-    "break",
-    "wordwrap",
-    "wordbreak",
-    "linewrap",
-    "ansi",
-    "styles",
-    "color",
-    "colour",
-    "colors",
-    "terminal",
-    "console",
-    "cli",
-    "string",
-    "tty",
-    "escape",
-    "formatting",
-    "rgb",
-    "256",
-    "shell",
-    "xterm",
-    "log",
-    "logging",
-    "command-line",
-    "text"
-  ],
-  "license": "MIT",
-  "name": "wrap-ansi",
+  "homepage": "https://github.com/npm/fs-minipass#readme",
+  "keywords": [],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "fs-minipass",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chalk/wrap-ansi.git"
+    "url": "git+https://github.com/npm/fs-minipass.git"
   },
   "scripts": {
-    "test": "xo && nyc ava"
+    "postpublish": "git push origin --follow-tags",
+    "postversion": "npm publish",
+    "preversion": "npm test",
+    "test": "tap"
   },
-  "version": "6.2.0"
+  "tap": {
+    "check-coverage": true
+  },
+  "version": "2.1.0"
 }

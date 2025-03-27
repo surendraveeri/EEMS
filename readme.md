@@ -1,97 +1,152 @@
-# wrap-ansi [![Build Status](https://travis-ci.org/chalk/wrap-ansi.svg?branch=master)](https://travis-ci.org/chalk/wrap-ansi) [![Coverage Status](https://coveralls.io/repos/github/chalk/wrap-ansi/badge.svg?branch=master)](https://coveralls.io/github/chalk/wrap-ansi?branch=master)
+# ansi-styles [![Build Status](https://travis-ci.org/chalk/ansi-styles.svg?branch=master)](https://travis-ci.org/chalk/ansi-styles)
 
-> Wordwrap a string with [ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code#Colors_and_Styles)
+> [ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code#Colors_and_Styles) for styling strings in the terminal
 
+You probably want the higher-level [chalk](https://github.com/chalk/chalk) module for styling your strings.
+
+<img src="screenshot.svg" width="900">
 
 ## Install
 
 ```
-$ npm install wrap-ansi
+$ npm install ansi-styles
 ```
-
 
 ## Usage
 
 ```js
-const chalk = require('chalk');
-const wrapAnsi = require('wrap-ansi');
+const style = require('ansi-styles');
 
-const input = 'The quick brown ' + chalk.red('fox jumped over ') +
-	'the lazy ' + chalk.green('dog and then ran away with the unicorn.');
+console.log(`${style.green.open}Hello world!${style.green.close}`);
 
-console.log(wrapAnsi(input, 20));
+
+// Color conversion between 16/256/truecolor
+// NOTE: If conversion goes to 16 colors or 256 colors, the original color
+//       may be degraded to fit that color palette. This means terminals
+//       that do not support 16 million colors will best-match the
+//       original color.
+console.log(style.bgColor.ansi.hsl(120, 80, 72) + 'Hello world!' + style.bgColor.close);
+console.log(style.color.ansi256.rgb(199, 20, 250) + 'Hello world!' + style.color.close);
+console.log(style.color.ansi16m.hex('#abcdef') + 'Hello world!' + style.color.close);
 ```
-
-<img width="331" src="screenshot.png">
-
 
 ## API
 
-### wrapAnsi(string, columns, options?)
+Each style has an `open` and `close` property.
 
-Wrap words to the specified column width.
+## Styles
 
-#### string
+### Modifiers
 
-Type: `string`
+- `reset`
+- `bold`
+- `dim`
+- `italic` *(Not widely supported)*
+- `underline`
+- `inverse`
+- `hidden`
+- `strikethrough` *(Not widely supported)*
 
-String with ANSI escape codes. Like one styled by [`chalk`](https://github.com/chalk/chalk). Newline characters will be normalized to `\n`.
+### Colors
 
-#### columns
+- `black`
+- `red`
+- `green`
+- `yellow`
+- `blue`
+- `magenta`
+- `cyan`
+- `white`
+- `blackBright` (alias: `gray`, `grey`)
+- `redBright`
+- `greenBright`
+- `yellowBright`
+- `blueBright`
+- `magentaBright`
+- `cyanBright`
+- `whiteBright`
 
-Type: `number`
+### Background colors
 
-Number of columns to wrap the text to.
+- `bgBlack`
+- `bgRed`
+- `bgGreen`
+- `bgYellow`
+- `bgBlue`
+- `bgMagenta`
+- `bgCyan`
+- `bgWhite`
+- `bgBlackBright` (alias: `bgGray`, `bgGrey`)
+- `bgRedBright`
+- `bgGreenBright`
+- `bgYellowBright`
+- `bgBlueBright`
+- `bgMagentaBright`
+- `bgCyanBright`
+- `bgWhiteBright`
 
-#### options
+## Advanced usage
 
-Type: `object`
+By default, you get a map of styles, but the styles are also available as groups. They are non-enumerable so they don't show up unless you access them explicitly. This makes it easier to expose only a subset in a higher-level module.
 
-##### hard
+- `style.modifier`
+- `style.color`
+- `style.bgColor`
 
-Type: `boolean`<br>
-Default: `false`
+###### Example
 
-By default the wrap is soft, meaning long words may extend past the column width. Setting this to `true` will make it hard wrap at the column width.
+```js
+console.log(style.color.green.open);
+```
 
-##### wordWrap
+Raw escape codes (i.e. without the CSI escape prefix `\u001B[` and render mode postfix `m`) are available under `style.codes`, which returns a `Map` with the open codes as keys and close codes as values.
 
-Type: `boolean`<br>
-Default: `true`
+###### Example
 
-By default, an attempt is made to split words at spaces, ensuring that they don't extend past the configured columns. If wordWrap is `false`, each column will instead be completely filled splitting words as necessary.
+```js
+console.log(style.codes.get(36));
+//=> 39
+```
 
-##### trim
+## [256 / 16 million (TrueColor) support](https://gist.github.com/XVilka/8346728)
 
-Type: `boolean`<br>
-Default: `true`
+`ansi-styles` uses the [`color-convert`](https://github.com/Qix-/color-convert) package to allow for converting between various colors and ANSI escapes, with support for 256 and 16 million colors.
 
-Whitespace on all lines is removed by default. Set this option to `false` if you don't want to trim.
+The following color spaces from `color-convert` are supported:
 
+- `rgb`
+- `hex`
+- `keyword`
+- `hsl`
+- `hsv`
+- `hwb`
+- `ansi`
+- `ansi256`
+
+To use these, call the associated conversion function with the intended output, for example:
+
+```js
+style.color.ansi.rgb(100, 200, 15); // RGB to 16 color ansi foreground code
+style.bgColor.ansi.rgb(100, 200, 15); // RGB to 16 color ansi background code
+
+style.color.ansi256.hsl(120, 100, 60); // HSL to 256 color ansi foreground code
+style.bgColor.ansi256.hsl(120, 100, 60); // HSL to 256 color ansi foreground code
+
+style.color.ansi16m.hex('#C0FFEE'); // Hex (RGB) to 16 million color foreground code
+style.bgColor.ansi16m.hex('#C0FFEE'); // Hex (RGB) to 16 million color background code
+```
 
 ## Related
 
-- [slice-ansi](https://github.com/chalk/slice-ansi) - Slice a string with ANSI escape codes
-- [cli-truncate](https://github.com/sindresorhus/cli-truncate) - Truncate a string to a specific width in the terminal
-- [chalk](https://github.com/chalk/chalk) - Terminal string styling done right
-- [jsesc](https://github.com/mathiasbynens/jsesc) - Generate ASCII-only output from Unicode strings. Useful for creating test fixtures.
-
+- [ansi-escapes](https://github.com/sindresorhus/ansi-escapes) - ANSI escape codes for manipulating the terminal
 
 ## Maintainers
 
 - [Sindre Sorhus](https://github.com/sindresorhus)
 - [Josh Junon](https://github.com/qix-)
-- [Benjamin Coe](https://github.com/bcoe)
 
+## For enterprise
 
----
+Available as part of the Tidelift Subscription.
 
-<div align="center">
-	<b>
-		<a href="https://tidelift.com/subscription/pkg/npm-wrap_ansi?utm_source=npm-wrap-ansi&utm_medium=referral&utm_campaign=readme">Get professional support for this package with a Tidelift subscription</a>
-	</b>
-	<br>
-	<sub>
-		Tidelift helps make open source sustainable for maintainers while giving companies<br>assurances about security, maintenance, and licensing for their dependencies.
-	</sub>
-</div>
+The maintainers of `ansi-styles` and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more.](https://tidelift.com/subscription/pkg/npm-ansi-styles?utm_source=npm-ansi-styles&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)
